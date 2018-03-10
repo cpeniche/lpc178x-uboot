@@ -1,0 +1,259 @@
+/*
+ * Copyright 2016 - Michael Kurz <michi.kurz@gmail.com>
+ * Copyright 2016 - Vikas MANOCHA <vikas.manocha@st.com>
+ *
+ * Based on:
+ * stm32f429.dtsi from Linux
+ * Copyright 2015 - Maxime Coquelin <mcoquelin.stm32@gmail.com>
+ *
+ * This file is dual-licensed: you can use it either under the terms
+ * of the GPL or the X11 license, at your option. Note that this dual
+ * licensing only applies to this file, and not this project as a
+ * whole.
+ *
+ *  a) This file is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of the
+ *     License, or (at your option) any later version.
+ *
+ *     This file is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ * Or, alternatively,
+ *
+ *  b) Permission is hereby granted, free of charge, to any person
+ *     obtaining a copy of this software and associated documentation
+ *     files (the "Software"), to deal in the Software without
+ *     restriction, including without limitation the rights to use,
+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+ *     sell copies of the Software, and to permit persons to whom the
+ *     Software is furnished to do so, subject to the following
+ *     conditions:
+ *
+ *     The above copyright notice and this permission notice shall be
+ *     included in all copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ *     OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#include "armv7-m.dtsi"
+#include <lpc178x_clk.h>
+
+/ {
+	clocks {
+		clk: clk@400fc100 {
+			#clock-cells = <0>;
+			reg = <0x400fc100 0x0c>;
+			reg-names = "pwrcnt"
+			compatible = "nxp,lpc178x-clk;
+			clock-frequency = <0>;
+			system-clock = <1>;
+			cpu-clock = <1>;
+			pll = <&pll0, 84000000>;						
+			u-boot,dm-pre-reloc;
+	  }		
+	};
+
+	soc {
+		u-boot,dm-pre-reloc;
+		mac: ethernet@20084000 {
+			compatible = "nxp,lpc178x-mac";
+			reg = <0x20084000 0x4000>;
+			reg-names = "stmmaceth";
+/*			
+			clocks = <&rcc 0 STM32F7_AHB1_CLOCK(ETHMAC)>,
+				 <&rcc 0 STM32F7_AHB1_CLOCK(ETHMACTX)>,
+				 <&rcc 0 STM32F7_AHB1_CLOCK(ETHMACRX)>;
+*/				 
+			interrupts = <61>, <62>;
+			interrupt-names = "macirq", "eth_wake_irq";
+			snps,pbl = <8>;
+			snps,mixed-burst;
+			dma-ranges;
+			status = "disabled";
+		};
+
+		emc: emc@2009C000 {
+			compatible = "nxp,lpc178x-emc";
+			reg = <0x2009C000 0x4000>;
+			clocks = <&rcc 0 0)>;
+			u-boot,dm-pre-reloc;
+		};
+	  
+	  timer2: timer@40090000 {
+			compatible = "lpc178x-timer";
+			reg = <0x40090000 0x74>;
+			/*interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;*/
+			pcop = <&pwrcnt PCTIM2>
+		};
+		
+		usart0: serial@4000C000 {
+			compatible = "nxp,lpc178x-usart", "nxp,lpc178x-uart";
+			reg = <0x40011000 0x100>;
+			interrupts = <37>;
+			status = "disabled";
+			u-boot,dm-pre-reloc;
+		};
+
+		pwrcnt: power-control@400FC0C4 {			
+			reg = <0x400FC0C4 0x1>;
+		};
+
+		pll0: pll0@400FC080 {			
+			#clock-cells = <0>;			
+			reg = <400FC080 0xc>;							
+		};
+
+		pinctrl: pin-controller {
+			#address-cells = <1>;
+			#size-cells = <1>;
+			compatible = "nxp,lpc178x-pinctrl";
+			ranges = <0 0x20098000 0x4000>;
+			u-boot,dm-pre-reloc;
+			pins-are-numbered;
+
+			gpio0: gpio@20098000 {
+				gpio-controller;
+				#gpio-cells = <2>;
+				compatible = "nxp,lpc178x-gpio";
+				reg = <0x0 0x20>;
+				nxp,bank-name = "GPIO0";
+				u-boot,dm-pre-reloc;
+			};
+
+			gpio1: gpio@20098020 {
+				gpio-controller;
+				#gpio-cells = <2>;
+				compatible = "nxp,lpc178x-gpio";
+				reg = <0x20 0x20>;
+				nxp,bank-name = "GPIO1";
+				u-boot,dm-pre-reloc;
+			};
+
+
+			gpio2: gpio@20098040 {
+				gpio-controller;
+				#gpio-cells = <2>;
+				compatible = "nxp,lpc178x-gpio";
+				reg = <0x40 0x20>;
+				st,bank-name = "GPIO2";
+				u-boot,dm-pre-reloc;
+			};
+
+			gpio3: gpio@20098060 {
+				gpio-controller;
+				#gpio-cells = <2>;
+				compatible = "nxp,lpc178x-gpio";
+				reg = <0x60 0x20>;
+				nxp,bank-name = "GPIO3";
+				u-boot,dm-pre-reloc;
+			};
+			
+			gpio4: gpio@20098080 {
+				gpio-controller;
+				#gpio-cells = <2>;
+				compatible = "nxp,lpc178x-gpio";
+				reg = <0x80 0x20>;
+				nxp,bank-name = "GPIO4";
+				u-boot,dm-pre-reloc;
+			};
+			
+			gpio5: gpio@200980A0 {
+				gpio-controller;
+				#gpio-cells = <2>;
+				compatible = "nxp,lpc178x-gpio";
+				reg = <0xA0 0x20>;
+				nxp,bank-name = "GPIO5";
+				u-boot,dm-pre-reloc;
+			};
+			/*
+			sdio_pins: sdio_pins@0 {
+				pins {
+					pinmux = <STM32F746_PC8_FUNC_SDMMC1_D0>,
+						 <STM32F746_PC9_FUNC_SDMMC1_D1>,
+						 <STM32F746_PC10_FUNC_SDMMC1_D2>,
+						 <STM32F746_PC11_FUNC_SDMMC1_D3>,
+						 <STM32F746_PC12_FUNC_SDMMC1_CK>,
+						 <STM32F746_PD2_FUNC_SDMMC1_CMD>;
+					drive-push-pull;
+					slew-rate = <2>;
+				};
+			};
+
+			sdio_pins_od: sdio_pins_od@0 {
+				pins1 {
+					pinmux = <STM32F746_PC8_FUNC_SDMMC1_D0>,
+						 <STM32F746_PC9_FUNC_SDMMC1_D1>,
+						 <STM32F746_PC10_FUNC_SDMMC1_D2>,
+						 <STM32F746_PC11_FUNC_SDMMC1_D3>,
+						 <STM32F746_PC12_FUNC_SDMMC1_CK>;
+					drive-push-pull;
+					slew-rate = <2>;
+				};
+
+				pins2 {
+					pinmux = <STM32F746_PD2_FUNC_SDMMC1_CMD>;
+					drive-open-drain;
+					slew-rate = <2>;
+				};
+			};
+
+			sdio_pins_b: sdio_pins_b@0 {
+				pins {
+					pinmux = <STM32F769_PG9_FUNC_SDMMC2_D0>,
+						 <STM32F769_PG10_FUNC_SDMMC2_D1>,
+						 <STM32F769_PB3_FUNC_SDMMC2_D2>,
+						 <STM32F769_PB4_FUNC_SDMMC2_D3>,
+						 <STM32F769_PD6_FUNC_SDMMC2_CLK>,
+						 <STM32F769_PD7_FUNC_SDMMC2_CMD>;
+					drive-push-pull;
+					slew-rate = <2>;
+				};
+			};
+
+			sdio_pins_od_b: sdio_pins_od_b@0 {
+				pins1 {
+					pinmux = <STM32F769_PG9_FUNC_SDMMC2_D0>,
+						 <STM32F769_PG10_FUNC_SDMMC2_D1>,
+						 <STM32F769_PB3_FUNC_SDMMC2_D2>,
+						 <STM32F769_PB4_FUNC_SDMMC2_D3>,
+						 <STM32F769_PD6_FUNC_SDMMC2_CLK>;
+					drive-push-pull;
+					slew-rate = <2>;
+				};
+
+				pins2 {
+					pinmux = <STM32F769_PD7_FUNC_SDMMC2_CMD>;
+					drive-open-drain;
+					slew-rate = <2>;
+				};
+			};
+*/
+		};
+	
+		sdio: sdio@400c0000 {
+			compatible = "st,stm32f4xx-sdio";
+			reg = <0x400C0000 0x400>;
+	/*		clocks = <&rcc 0 171>;*/
+			interrupts = <49>;
+			status = "disabled";
+	/*		pinctrl-0 = <&sdio_pins>;
+			pinctrl-1 = <&sdio_pins_od>;
+			pinctrl-names = "default", "opendrain";
+			max-frequency = <48000000>;*/
+		};
+	};
+};
+
+&systick {
+	status = "okay";
+};

@@ -118,5 +118,12 @@ config ROCKCHIP_TIMER
 	help
 	  Select this to enable support for the timer found on
 	  Rockchip devices.
+	  
+config LPC178_TIMER
+        bool "Nxp lpc178 timer support"
+	depends on TIMER
+	help
+	  Select this to enable support for the timer found on
+	  Nxp lpc178 devices.	  
 
 endmenu

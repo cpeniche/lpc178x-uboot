@@ -630,6 +630,13 @@ config ARCH_MX7ULP
         select CPU_V7
 	select ROM_UNIFIED_SECTIONS
 	imply MXC_GPIO
+	
+config ARCH_LPC
+	bool "NXP LPC178x"
+	select CPU_V7M
+	select DM
+	select DM_SERIAL
+	select SYS_THUMB_BUILD 	
 
 config ARCH_MX7
 	bool "Freescale MX7"
@@ -1217,6 +1224,8 @@ source "arch/arm/mach-integrator/Kconfig"
 source "arch/arm/mach-keystone/Kconfig"
 
 source "arch/arm/mach-kirkwood/Kconfig"
+
+source "arch/arm/mach-lpc/Kconfig"
 
 source "arch/arm/mach-mvebu/Kconfig"
 

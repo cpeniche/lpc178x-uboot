@@ -1,0 +1,19 @@
+if TARGET_LPC1788-LANDTIGER
+
+config SYS_BOARD
+	string
+	default "lpc1788-landtiger"
+
+config SYS_VENDOR
+	string
+	default "nxp"
+
+config SYS_SOC
+	string
+	default "lpc178"
+
+config SYS_CONFIG_NAME
+	string
+	default "lpc1788-landtiger"
+
+endif

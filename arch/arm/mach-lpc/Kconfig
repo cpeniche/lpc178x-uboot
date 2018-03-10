@@ -1,0 +1,10 @@
+if ARCH_LPC
+
+config LPC178
+	bool "lpc178 family"
+	select CLK
+	select DM_TIMER
+	
+source "arch/arm/mach-lpc/lpc178/Kconfig"
+
+endif

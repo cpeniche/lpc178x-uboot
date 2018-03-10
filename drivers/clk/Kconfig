@@ -75,6 +75,13 @@ config CLK_ZYNQMP
 	  This clock driver adds support for clock realted settings for
 	  ZynqMP platform.
 
+config CLK_LPC178
+	bool "Enable clock driver support for Nxp lpc178"
+	depends on CLK && ARCH_LPC
+	help
+	  This clock driver adds support for clock realted settings for
+	  Nxp lpc platform.	  
+
 source "drivers/clk/tegra/Kconfig"
 source "drivers/clk/uniphier/Kconfig"
 source "drivers/clk/exynos/Kconfig"
