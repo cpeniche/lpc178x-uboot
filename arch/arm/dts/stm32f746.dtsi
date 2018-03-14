@@ -57,7 +57,7 @@
 			compatible = "fixed-clock";
 			clock-frequency = <0>;
 		};
-};
+	};
 
 	soc {
 		u-boot,dm-pre-reloc;

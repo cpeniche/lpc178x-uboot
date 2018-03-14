@@ -166,6 +166,14 @@ config STM32_RCC
 	  block) is responsible of the management of the clock and reset
 	  generation.
 	  This driver is similar to an MFD driver in the Linux kernel.
+	  
+config LPC_PCONP
+	bool "Enable PCONP driver for the LPC SoC's family"
+	depends on ARCH_LPC && MISC
+	help
+	  Enable the PCONP LPC driver. The PCONP block (Power Control for 
+	  Peripherals Registers) is responsible of the management of the clock 
+	  generation.
 
 config TEGRA_CAR
 	bool "Enable support for the Tegra CAR driver"

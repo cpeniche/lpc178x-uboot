@@ -46,21 +46,19 @@
  */
 
 #include "armv7-m.dtsi"
-#include <lpc178x_clk.h>
+#include <dt-bindings/clock/lpc_clock.h>
+
 
 / {
-	clocks {
-		clk: clk@400fc100 {
-			#clock-cells = <0>;
-			reg = <0x400fc100 0x0c>;
-			reg-names = "pwrcnt"
-			compatible = "nxp,lpc178x-clk;
+	clocks {		
+		#address-cells = <1>;
+		#size-cells = <1>;
+		clk: clk-hse {								
 			clock-frequency = <0>;
 			system-clock = <1>;
 			cpu-clock = <1>;
-			pll = <&pll0, 84000000>;						
-			u-boot,dm-pre-reloc;
-	  }		
+			pll = <&pll0 84000000>;									
+	  };		
 	};
 
 	soc {
@@ -85,7 +83,6 @@
 		emc: emc@2009C000 {
 			compatible = "nxp,lpc178x-emc";
 			reg = <0x2009C000 0x4000>;
-			clocks = <&rcc 0 0)>;
 			u-boot,dm-pre-reloc;
 		};
 	  
@@ -93,24 +90,27 @@
 			compatible = "lpc178x-timer";
 			reg = <0x40090000 0x74>;
 			/*interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;*/
-			pcop = <&pwrcnt PCTIM2>
+			clock = <&pconp 0 LPC_PCTIM2>;
 		};
 		
 		usart0: serial@4000C000 {
-			compatible = "nxp,lpc178x-usart", "nxp,lpc178x-uart";
+			compatible = "nxp,lpc-usart", "nxp,lpc-uart";
 			reg = <0x40011000 0x100>;
 			interrupts = <37>;
+			clock = <&pconp 0 LPC_UART0>;
 			status = "disabled";
 			u-boot,dm-pre-reloc;
 		};
 
-		pwrcnt: power-control@400FC0C4 {			
+		pconp: pconp@400FC0C4 {
+			#clock-cells=<1>;		
+			compatible = "nxp,lpc-pconp";	
 			reg = <0x400FC0C4 0x1>;
+			u-boot,dm-pre-reloc;
 		};
 
-		pll0: pll0@400FC080 {			
-			#clock-cells = <0>;			
-			reg = <400FC080 0xc>;							
+		pll0: pll0@400FC080 {						
+			reg = <0x400FC080 0xc>;							
 		};
 
 		pinctrl: pin-controller {

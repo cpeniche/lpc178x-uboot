@@ -1,6 +1,6 @@
 if LPC178
 
-config TARGET_LPC1788-LANDTIGER
+config TARGET_LPC1788_LANDTIGER
 	bool "LPC1788 LandTiger board"
 
 source "board/nxp/lpc1788-landtiger/Kconfig"
